@@ -6,31 +6,16 @@ import Col from "react-bootstrap/esm/Col";
 import Button from "react-bootstrap/esm/Button";
 import Card from 'react-bootstrap/Card';
 import EmptyList from "../../components/EmptyList";
+import AddProducts from "./AddProducts";
 
 const Products = () => {
-    const sampleProducts = [
-        {
-            id: "1",
-            image: "https://i0.wp.com/www.ear-fidelity.com/wp-content/uploads/2022/10/P1054788s-scaled.jpg?fit=2560%2C1707&ssl=1",
-            name: "Airpods",
-            description: "Active Noise Cancelation",
-            price: "250"
-        },
-        {
-            id: "2",
-            image: "https://cdn.thewirecutter.com/wp-content/media/2025/03/BEST-MACBOOKS-2048px-hero.jpg?auto=webp&quality=75&width=1024",
-            name: "Macbook Pro",
-            description: "14-inch with M1 chip",
-            price: "1900"
-        },
-        {
-            id: "3",
-            image: "https://cdn.thewirecutter.com/wp-content/media/2024/09/applewatch-2048px-4495.jpg?auto=webp&quality=75&width=1024",
-            name: "Apple Watch",
-            description: "Smart wearable with heart tracking",
-            price: "800"
-        }
-    ]
+    const [sampleProducts, setSampleProducts] = React.useState([]); 
+
+    const handleAddProducts = (newProduct) => {
+        const productId = {...newProduct, id: Date.now().toString()}
+
+        setSampleProducts((prevProducts)=>[...prevProducts, productId])
+    }
     return(
         <>
             <section>
@@ -38,7 +23,8 @@ const Products = () => {
                 <Container>
                     <Row lg={12} className="justify-content-end" style={{marginBottom: 16}}>
                         <Col xs="auto" style={{marginTop:16}}>
-                            <Button variant="primary">  <i class="bi bi-plus-circle" style={{marginRight:"8px"}}></i>Add Product</Button>
+                            {/* <Button variant="primary">  <i class="bi bi-plus-circle" style={{marginRight:"8px"}}></i>Add Product</Button> */}
+                            <AddProducts onAddProduct = {handleAddProducts}/>
                         </Col>
                     </Row>
 
@@ -50,7 +36,7 @@ const Products = () => {
                             sampleProducts.map(products =>(
                                 <Col key={products.id} xs={12} md={6} lg={4} style={{ marginBottom : '20px'}}>
                                     <Card style={{ width: '18rem' }}>
-                                        <Card.Img variant="top" src={products.image} alt="loading"/>
+                                        <Card.Img variant="top" style={{height: "200px", objectFit: "cover"}} src={products.imageUrl} alt="loading"/>
                                         <Card.Body>
                                             <Card.Title>{products.name}</Card.Title>
                                             <Card.Text>
@@ -61,8 +47,8 @@ const Products = () => {
                                                 <p style={{color:"#165691", fontWeight:'bold',fontSize: "13px"}}>${products.price}</p>
 
                                                 <div>
-                                                    <i class="bi bi-pencil-square" style={{cursor:'pointer', marginRight: 10 }}></i>
-                                                    <i class="bi bi-trash3" style={{cursor:'pointer'}}></i>
+                                                    <i className="bi bi-pencil-square" style={{cursor:'pointer', marginRight: 10, color: "#258028" }}></i>
+                                                    <i className="bi bi-trash3" style={{cursor:'pointer', color: 'red'}}></i>
                                                 </div>
 
                                             </div>
