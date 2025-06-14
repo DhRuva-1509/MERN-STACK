@@ -35,7 +35,7 @@ export const addProduct = (product) => async (dispatch) => {
 
 export const editProduct = (product) => async (dispatch) => {
   try {
-    const response = await api.put(`/products/${product.id}`, product);
+    const response = await api.put(`/products/${product._id}`, product);
     dispatch({
       type: EDIT_PRODUCT_SUCCESS,
       payload: response.data
