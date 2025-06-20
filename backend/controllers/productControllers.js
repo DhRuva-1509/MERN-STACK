@@ -1,10 +1,32 @@
-// backend/controllers/productControllers.js
 import Product from '../model/Product.js';
 
 export const getProducts = async (req, res) => {
   try {
-    const products = await Product.find();
-    res.json(products);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const sortField = req.query.sort || '-createdAt';
+    const keyword = req.query.keyword || '';
+
+    const query = {
+      $or: [
+        { name: { $regex: keyword, $options: 'i' } },
+        { description: { $regex: keyword, $options: 'i' } }
+      ]
+    };
+
+    const total = await Product.countDocuments(query);
+
+    const products = await Product.find(query)
+      .sort(sortField)
+      .skip((page - 1) * limit)
+      .limit(limit);
+
+    res.json({
+      products,
+      page,
+      totalPages: Math.ceil(total / limit),
+      totalProducts: total
+    });
   } catch (err) {
     res.status(500).json({ message: 'Server error', error: err.message });
   }
